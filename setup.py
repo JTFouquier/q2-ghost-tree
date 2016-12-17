@@ -6,12 +6,12 @@ import ast
 # https://github.com/mitsuhiko/flask/blob/master/setup.py
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
-with open('ghost_tree_plugin/__init__.py', 'rb') as f:
+with open('q2_ghost_tree/__init__.py', 'rb') as f:
     hit = _version_re.search(f.read().decode('utf-8')).group(1)
     version = str(ast.literal_eval(hit))
 
 setup(
-    name="ghost-tree-plugin",
+    name="q2-ghost-tree",
     version=version,
     packages=find_packages(),
     # pandas, q2templates and q2-dummy-types are only required for the dummy
@@ -25,11 +25,11 @@ setup(
     description="Tool for creating hybrid-gene phylogenetic trees",
     entry_points={
         "qiime.plugins":
-        ["ghost-tree-plugin=ghost_tree_plugin.plugin_setup:plugin"]
+        ["q2-ghost-tree=q2_ghost_tree.plugin_setup:plugin"]
     },
     # If you are creating a visualizer, all template assets must be included in
     # the package source, if you are not using q2templates this can be removed
     package_data={
-        "ghost_tree_plugin": ["assets/index.html"]
+        "q2_ghost_tree": ["assets/index.html"]
     }
 )
