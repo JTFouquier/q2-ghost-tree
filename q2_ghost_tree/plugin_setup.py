@@ -1,4 +1,5 @@
 import qiime.plugin
+from qiime.plugin import (Properties)
 
 import q2_ghost_tree
 
@@ -9,7 +10,7 @@ from q2_types.feature_table import ( FeatureTable, Frequency, RelativeFrequency,
 from q2_types.feature_data import (FeatureData, Sequence, Taxonomy, AlignedSequence)
 from q2_types.tree import (Phylogeny, Rooted)
 from ._dummy_method import concatenate_ints
-from ._hybrid_tree import extensions_onto_foundation
+from ._hybrid_tree import scaffold_hybrid_tree
 # (TODO) need to register all code here
 
 plugin = qiime.plugin.Plugin(
@@ -51,18 +52,18 @@ plugin.methods.register_function(
 )
 
 plugin.methods.register_function(
-    function=extensions_onto_foundation,
+    function=scaffold_hybrid_tree,
     inputs={
         'otus_fh': FeatureTable[PresenceAbsence],
         'extension_taxonomy_fh': FeatureData[Taxonomy],
-        'extension_seqs_fh': FeatureData[Sequence],
+        'extension_seq_fh': FeatureData[Sequence],
         'foundation_alignment_fh': FeatureData[AlignedSequence]
     },
     parameters={
     },
     outputs=[
-        ('ghost_tree_newick', Phylogeny[Rooted]),
+        ('ghost_tree_fp', Phylogeny[Rooted]),
     ],
-    name='hybrid-tree',
+    name='scaffold-hybrid-tree',
     description='This method creates a hybrid-gene phylogenetic tree.'
 )
