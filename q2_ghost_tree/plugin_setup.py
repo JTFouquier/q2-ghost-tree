@@ -8,6 +8,7 @@ from q2_types.tree import Phylogeny, Rooted
 
 from ._dummy_method import concatenate_ints
 from ._scaffold_hybrid_tree import scaffold_hybrid_tree
+from ._extensions_cluster import extensions_cluster
 
 
 import qiime.plugin.model as model
@@ -31,14 +32,14 @@ plugin = qiime.plugin.Plugin(
 )
 
 """
-MAKE SEMANTIC TYPES HERE? Not working
+Below Semantic Types that are ghost-tree specific are defined.
 """
 
 # Define semantic types.
 OtuMap = qiime.plugin.SemanticType('OtuMap')
 
 # Register semantic types on the plugin.
-plugin.register_semantic_types('OtuMap')
+plugin.register_semantic_types(OtuMap)
 
 ###############################################################################
 #
@@ -116,7 +117,11 @@ def _2(data: list) -> OtuMapFormat:
 # visualizers. Replace them with your own registrations when you are ready to
 # develop your plugin.
 
+'''
+Register the methods used by ghost-tree
+'''
 
+# Example method:
 plugin.methods.register_function(
     function=concatenate_ints,
     inputs={
@@ -153,6 +158,7 @@ plugin.methods.register_function(
     description='This method creates a hybrid-gene phylogenetic tree.'
 )
 
+#(TODO) clarify parameter vs inputs here (example above)
 plugin.methods.register_function(
     function=extensions_cluster,
     inputs={
