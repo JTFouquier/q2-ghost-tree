@@ -10,7 +10,7 @@ import os
 
 
 def extensions_cluster(extensions_sequences_fp: str,
-                       similarity_threshold: float) -> OtuMap:
+                       similarity_threshold: float) -> str:
 
     def preprocess_extension_tree_sequences(extension_sequences_fp,
                                             similarity_threshold,
