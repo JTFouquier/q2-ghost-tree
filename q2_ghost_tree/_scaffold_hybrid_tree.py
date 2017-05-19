@@ -12,6 +12,7 @@ import subprocess
 
 import skbio
 
+# from q2_ghost_tree._otu_map import OtuMap
 
 # created an additional function so as to keep naming convention the same
 # as in the original ghost-tree tool.

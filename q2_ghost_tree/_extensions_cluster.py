@@ -8,7 +8,6 @@
 import os
 
 
-
 def extensions_cluster(extensions_sequences_fp: str,
                        similarity_threshold: float) -> str:
 

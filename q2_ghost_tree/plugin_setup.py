@@ -1,20 +1,17 @@
-import qiime.plugin
+import qiime2.plugin
 import q2_ghost_tree
 import importlib
 
-from q2_dummy_types import IntSequence1, IntSequence2
 from q2_types.feature_data import FeatureData, Sequence, Taxonomy, AlignedSequence
 from q2_types.tree import Phylogeny, Rooted
 
-
-from ._dummy_method import concatenate_ints
 from ._scaffold_hybrid_tree import scaffold_hybrid_tree
 from ._extensions_cluster import extensions_cluster
 
 
 # (TODO) need to register all code here
 
-plugin = qiime.plugin.Plugin(
+plugin = qiime2.plugin.Plugin(
     name='ghost-tree',
     version=q2_ghost_tree.__version__,
     website='https://github.com/JTFouquier/ghost-tree',
@@ -29,7 +26,7 @@ plugin = qiime.plugin.Plugin(
     citation_text=None
 )
 
-print (plugin.__dict__)
+# print (plugin.__dict__)
 
 importlib.import_module('q2_ghost_tree._otu_map')
 
@@ -41,38 +38,15 @@ print (plugin.__dict__)
 print (plugin.types['OtuMap'])
 
 print (OtuMap.__dict__)
-# The next two code blocks are examples of how to register methods and
-# visualizers. Replace them with your own registrations when you are ready to
-# develop your plugin.
 
 '''
 Register the methods used by ghost-tree
 '''
 
-# Example method:
-plugin.methods.register_function(
-    function=concatenate_ints,
-    inputs={
-        'ints1': IntSequence1 | IntSequence2,
-        'ints2': IntSequence1,
-        'ints3': IntSequence2
-    },
-    parameters={
-        'int1': qiime.plugin.Int,
-        'int2': qiime.plugin.Int
-    },
-    outputs=[
-        ('concatenated_ints', IntSequence1)
-    ],
-    name='Concatenate integers',
-    description='This method concatenates integers into a single sequence in '
-                'the order they are provided.'
-)
-
 plugin.methods.register_function(
     function=scaffold_hybrid_tree,
     inputs={
-        'otus_fh': str, # ghost-tree semantic type
+        'otus_fh': OtuMap, # ghost-tree semantic type
         'extension_taxonomy_fh': FeatureData[Taxonomy],
         'extension_seq_fh': FeatureData[Sequence],
         'foundation_alignment_fh': FeatureData[AlignedSequence]
@@ -94,7 +68,7 @@ plugin.methods.register_function(
     inputs={
         'extensions_sequences_fp': FeatureData[Sequence],
     },
-    parameters={ 'similarity_threshold': qiime.plugin.Int
+    parameters={ 'similarity_threshold': qiime2.plugin.Int
     },
     outputs=[
         ('otu_formatted_fp', OtuMap),

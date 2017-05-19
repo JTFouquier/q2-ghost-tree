@@ -10,14 +10,13 @@
 # copied from QIIME 2 dummy types example for defining a new semantic type
 # https://github.com/qiime2/q2-dummy-types/blob/master/q2_dummy_types/
 # _int_sequence.py
-import qiime.plugin
-import qiime.plugin.model as model
+import qiime2.plugin
+import qiime2.plugin.model as model
 
 from .plugin_setup import plugin
 
 # Define semantic types
-OtuMap = qiime.plugin.SemanticType('OtuMap')
-
+OtuMap = qiime2.plugin.SemanticType('OtuMap')
 
 # Register semantic types on the plugin.
 plugin.register_semantic_types(OtuMap)
