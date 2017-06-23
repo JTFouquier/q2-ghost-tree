@@ -12,21 +12,25 @@ import subprocess
 import skbio
 # import ghosttree.scaffold.hybridtree as hybridtree
 import ghosttree.scaffold.hybridtree as hybridtree
+from q2_types.feature_data import (TSVTaxonomyFormat, DNAFASTAFormat,
+                                   AlignedDNAFASTAFormat)
+from ._otu_map import OtuMapFormat
 
 from qiime2.plugin import (Str, Int, Choices, MetadataCategory, Plugin)
-
 
 # from q2_ghost_tree._otu_map import OtuMap
 
 # created an additional function so as to keep naming convention the same
 # as in the original ghost-tree tool.
-def scaffold_hybrid_tree(otu_file_fh: Str,
-                         extension_taxonomy_fh: Str,
-                         extension_seq_fh: Str,
-                         foundation_alignment_fh: Str) -> skbio.TreeNode:
+def scaffold_hybrid_tree(otu_map: OtuMapFormat,
+                         extension_taxonomy: TSVTaxonomyFormat,
+                         extension_seq: DNAFASTAFormat,
+                         foundation_alignment: AlignedDNAFASTAFormat) -> skbio.TreeNode:
 
     print('lalala')
-    hybridtree(otu_file_fh, extension_taxonomy_fh, extension_seq_fh, foundation_alignment_fh)
+    return skbio.TreeNode()
+
+    #hybridtree(otu_file_fh, extension_taxonomy_fh, extension_seq_fh, foundation_alignment_fh)
 
 
 '''
