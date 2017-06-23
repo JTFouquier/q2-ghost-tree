@@ -9,18 +9,27 @@ import re
 import os
 import shutil
 import subprocess
-
 import skbio
+# import ghosttree.scaffold.hybridtree as hybridtree
+import ghosttree.scaffold.hybridtree as hybridtree
+
+from qiime2.plugin import (Str, Int, Choices, MetadataCategory, Plugin)
+
 
 # from q2_ghost_tree._otu_map import OtuMap
 
 # created an additional function so as to keep naming convention the same
 # as in the original ghost-tree tool.
-def scaffold_hybrid_tree(otu_file_fh: str,
-                         extension_taxonomy_fh: str,
-                         extension_seq_fh: str,
-                         foundation_alignment_fh: str) -> skbio.TreeNode:
+def scaffold_hybrid_tree(otu_file_fh: Str,
+                         extension_taxonomy_fh: Str,
+                         extension_seq_fh: Str,
+                         foundation_alignment_fh: Str) -> skbio.TreeNode:
 
+    print('lalala')
+    hybridtree(otu_file_fh, extension_taxonomy_fh, extension_seq_fh, foundation_alignment_fh)
+
+
+'''
     def extensions_onto_foundation(otu_file_fh, extension_taxonomy_fh,
                                    extension_seq_fh,
                                    foundation_alignment_fh,
@@ -78,6 +87,7 @@ def scaffold_hybrid_tree(otu_file_fh: str,
             c) log error file (this is an optional file that you can have if you
                type '--stderr')
         """
+
         global foundation_accession_genus_dic  # needs global assignment for flake8
         foundation_accession_genus_dic = {}
         std_output, std_error = "", ""
@@ -260,3 +270,5 @@ def scaffold_hybrid_tree(otu_file_fh: str,
                                extension_seq_fh,
                                foundation_alignment_fh,
                                ghost_tree_fp)
+
+'''

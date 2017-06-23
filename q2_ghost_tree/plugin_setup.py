@@ -3,13 +3,19 @@ import q2_ghost_tree
 import importlib
 
 from q2_types.feature_data import FeatureData, Sequence, Taxonomy, AlignedSequence
+from q2_types.feature_table import FeatureTable
+
 from q2_types.tree import Phylogeny, Rooted
+from qiime2.plugin import (Str, Int, Choices, MetadataCategory, Plugin)
+import qiime2.plugin.model as model
 
 from ._scaffold_hybrid_tree import scaffold_hybrid_tree
 from ._extensions_cluster import extensions_cluster
+# from q2_ghost_tree import OtuMap
+# from ._type import OtuMap
+from ._otu_map import OtuMapFormat
+import qiime2.plugin.model as model
 
-
-# (TODO) need to register all code here
 
 plugin = qiime2.plugin.Plugin(
     name='ghost-tree',
@@ -26,16 +32,20 @@ plugin = qiime2.plugin.Plugin(
     citation_text=None
 )
 
-# print (plugin.__dict__)
+OtuMap = qiime2.plugin.SemanticType('OtuMap')
+OtuMapDirectoryFormat = model.SingleFileDirectoryFormat(
+    'OtuMapDirectoryFormat', 'ints.txt', OtuMapFormat)
+#
+#
+# plugin.register_formats(OtuMapFormat, OtuMapDirectoryFormat)
 
-importlib.import_module('q2_ghost_tree._otu_map')
-
-from q2_ghost_tree._otu_map import OtuMap
-
+plugin.register_semantic_type_to_format(
+    OtuMap,
+    artifact_format=OtuMapDirectoryFormat)
 
 print (plugin.__dict__)
 
-print (plugin.types['OtuMap'])
+# print (plugin.types['OtuMap'])
 
 print (OtuMap.__dict__)
 
@@ -46,7 +56,7 @@ Register the methods used by ghost-tree
 plugin.methods.register_function(
     function=scaffold_hybrid_tree,
     inputs={
-        'otus_fh': OtuMap, # ghost-tree semantic type
+        'otu_file_fh': OtuMap, # ghost-tree semantic type
         'extension_taxonomy_fh': FeatureData[Taxonomy],
         'extension_seq_fh': FeatureData[Sequence],
         'foundation_alignment_fh': FeatureData[AlignedSequence]
@@ -60,15 +70,12 @@ plugin.methods.register_function(
     description='This method creates a hybrid-gene phylogenetic tree.'
 )
 
-#(TODO) clarify parameter vs inputs here (example above)
-#(TODO) make this an OtuMap
-#(TODO) make int a float
 plugin.methods.register_function(
     function=extensions_cluster,
     inputs={
         'extensions_sequences_fp': FeatureData[Sequence],
     },
-    parameters={ 'similarity_threshold': qiime2.plugin.Int
+    parameters={'similarity_threshold': qiime2.plugin.Int
     },
     outputs=[
         ('otu_formatted_fp', OtuMap),

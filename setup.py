@@ -18,8 +18,7 @@ setup(
     # methods and visualizers provided as examples. Remove these dependencies
     # when you're ready to develop your plugin, and add your own dependencies
     # (if there are any).
-    install_requires=['pandas',
-                      'q2templates >= 0.0.6'],
+    install_requires=['pandas', 'q2templates >= 0.0.6'],
     author="Jennifer Fouquier",
     author_email="jennietf@gmail.com",
     description="Tool for creating hybrid-gene phylogenetic trees",
@@ -27,9 +26,4 @@ setup(
         "qiime2.plugins":
         ["q2-ghost-tree=q2_ghost_tree.plugin_setup:plugin"]
     },
-    # If you are creating a visualizer, all template assets must be included in
-    # the package source, if you are not using q2templates this can be removed
-    package_data={
-        "q2_ghost_tree": ["assets/index.html"]
-    }
 )
