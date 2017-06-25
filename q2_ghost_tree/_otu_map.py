@@ -6,6 +6,8 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+import re
+
 import qiime2.plugin.model as model
 
 ###############################################################################
@@ -20,16 +22,28 @@ import qiime2.plugin.model as model
 class OtuMapFormat(model.TextFileFormat):
 
     def sniff(self):
-        return True #  (TODO)
         with self.open() as fh:
-            print('lalala')
+
             for line, _ in zip(fh, range(5)):
-                print('line')
+
+                # (NOTE) unsure how to validate an OTU file!
+
+                # check that it's a string
                 try:
-                    print('TESTING INSIDE OTU MAP SNIFFER')
-                    int(line.rstrip('\n'))
-                except (TypeError, ValueError):
+                    if type(line) == str:
+                        pass
+                    else:
+                        return False
+                except:
                     return False
+
+                # shouldn't contain special chars
+                try:
+                    if not re.search(';', line):
+                        pass
+                except:
+                    pass
+
             return True
 
 OtuMapDirectoryFormat = model.SingleFileDirectoryFormat(
