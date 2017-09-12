@@ -10,7 +10,7 @@ import tempfile
 import os
 
 from ghosttree.scaffold.hybridtree import extensions_onto_foundation
-from q2_types.feature_data import (DNAFASTAFormat, AlignedDNAFASTAFormat)
+from q2_types.feature_data import DNAFASTAFormat, AlignedDNAFASTAFormat, TSVTaxonomyFormat
 from q2_types.tree import NewickFormat
 
 from ._otu_map import OtuMapFormat
@@ -19,7 +19,7 @@ from ._taxonomy import TaxonomyGTFormat
 # created an additional function so as to keep naming convention the same
 # as in the original ghost-tree tool.
 def scaffold_hybrid_tree(otu_map: OtuMapFormat,
-                         extension_taxonomy: TaxonomyGTFormat,
+                         extension_taxonomy: TSVTaxonomyFormat,
                          extension_sequences: DNAFASTAFormat,
                          foundation_alignment: AlignedDNAFASTAFormat) -> NewickFormat:
 
