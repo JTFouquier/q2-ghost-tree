@@ -1,14 +1,13 @@
 import qiime2.plugin
-# from q2_types.feature_data import FeatureData, Sequence, Taxonomy, AlignedSequence
-from q2_types.feature_data import FeatureData, Sequence, AlignedSequence
-from q2_types.tree import Phylogeny, Rooted
+
+from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, Taxonomy
+from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
 from ._scaffold_hybrid_tree import scaffold_hybrid_tree
 from ._extensions_cluster import extensions_cluster
 from ._tip_to_tip_distances import tip_to_tip_distances
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
-from ._taxonomy import TaxonomyGTFormat, TaxonomyGTDirectoryFormat
 
 # initiate Qiime2 plugin
 plugin = qiime2.plugin.Plugin(
@@ -36,25 +35,20 @@ plugin.register_semantic_types(OtuMap)
 plugin.register_semantic_type_to_format(OtuMap,
                                         artifact_format=OtuMapDirectoryFormat)
 
-
-TaxonomyGT = qiime2.plugin.SemanticType('TaxonomyGT')
-plugin.register_formats(TaxonomyGTFormat, TaxonomyGTDirectoryFormat)
-plugin.register_semantic_types(TaxonomyGT)
-plugin.register_semantic_type_to_format(TaxonomyGT,
-                                        artifact_format=TaxonomyGTDirectoryFormat)
-
-
 # Register all methods used by ghost-tree
 plugin.methods.register_function(
     function=scaffold_hybrid_tree,
     inputs={
-        'otu_map': OtuMap, # ghost-tree semantic type
-        'extension_taxonomy': TaxonomyGT,
+        'otu_map': OtuMap,  # ghost-tree semantic type
+        'extension_taxonomy': FeatureData[Taxonomy],
         'extension_sequences': FeatureData[Sequence],
-        'foundation_alignment': FeatureData[AlignedSequence]
-    },
+        'foundation_alignment': (FeatureData[AlignedSequence] or
+                                 Phylogeny[Rooted] or Phylogeny[Unrooted]),
+            },
     parameters={
-    },
+        'foundation_taxonomy': qiime2.plugin.Str,
+        'graft_level': qiime2.plugin.Str,
+                },
     outputs=[
         ('ghost_tree', Phylogeny[Rooted]),
     ],
