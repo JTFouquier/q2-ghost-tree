@@ -21,18 +21,22 @@ from ._otu_map import OtuMapFormat
 
 _ghost_tree_defaults = {'graft_level': 'g'}
 
-def scaffold_hybrid_tree_foundation_alignment(
-        otu_map: OtuMapFormat,
+def scaffold_hybrid_tree_foundation_tree(otu_map: OtuMapFormat,
         extension_taxonomy: TSVTaxonomyFormat,
         extension_sequences: DNAFASTAFormat,
-        foundation_alignment: AlignedDNAFASTAFormat,
-        graft_level: str=_ghost_tree_defaults[
-        'graft_level']) -> NewickFormat:
+        foundation_tree: NewickFormat,
+        foundation_taxonomy: TSVTaxonomyFormat,
+        graft_level: str=_ghost_tree_defaults['graft_level'],
+        ) -> NewickFormat:
 
     otu_map_fh = otu_map.open()
     extension_taxonomy_fh = extension_taxonomy.open()
     extension_sequences_fh = extension_sequences.open()
-    foundation_alignment_fh = foundation_alignment.open()
+    foundation_alignment_fh = foundation_tree.open()
+    if foundation_taxonomy:
+        foundation_taxonomy_fh = foundation_taxonomy.open()
+    else:
+        foundation_taxonomy_fh = None
 
     with tempfile.TemporaryDirectory() as tmp:
 
@@ -41,7 +45,8 @@ def scaffold_hybrid_tree_foundation_alignment(
         thetree = extensions_onto_foundation(otu_map_fh, extension_taxonomy_fh,
                                              extension_sequences_fh,
                                              foundation_alignment_fh,
-                                             gt_path, graft_level, None)[0]
+                                             gt_path, graft_level,
+                                             foundation_taxonomy_fh)[0]
 
         # write new file to tmp file; gets deleted when this block is done
         gt_temp_file = open(tmp + 'ghost_tree', 'w')

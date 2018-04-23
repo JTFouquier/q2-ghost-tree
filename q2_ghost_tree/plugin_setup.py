@@ -4,7 +4,10 @@ from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, Taxono
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
-from ._scaffold_hybrid_tree import scaffold_hybrid_tree
+from ._scaffold_hybrid_tree import scaffold_hybrid_tree_foundation_alignment
+from ._scaffold_hybrid_tree_foundation_tree import \
+    scaffold_hybrid_tree_foundation_tree
+
 from ._extensions_cluster import extensions_cluster
 from ._tip_to_tip_distances import tip_to_tip_distances
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
@@ -36,26 +39,47 @@ plugin.register_semantic_type_to_format(OtuMap,
                                         artifact_format=OtuMapDirectoryFormat)
 
 # Register all methods used by ghost-tree
+# TODO add descriptions here... what is the point of name... redundant on help
+# TODO pages
 plugin.methods.register_function(
-    function=scaffold_hybrid_tree,
+    function=scaffold_hybrid_tree_foundation_alignment,
     inputs={
         'otu_map': OtuMap,  # ghost-tree semantic type
         'extension_taxonomy': FeatureData[Taxonomy],
         'extension_sequences': FeatureData[Sequence],
-        'foundation_alignment': (FeatureData[AlignedSequence] or
-                                 Phylogeny[Rooted] or Phylogeny[Unrooted]),
+        'foundation_alignment': FeatureData[AlignedSequence],
             },
     parameters={
-        'foundation_taxonomy': qiime2.plugin.Str,
         'graft_level': qiime2.plugin.Str,
                 },
     outputs=[
         ('ghost_tree', Phylogeny[Rooted]),
     ],
-    name='scaffold-hybrid-tree',
-    description='This method creates a hybrid-gene phylogenetic tree.'
+    name='scaffold-hybrid-tree-foundation-alignment',
+    description='Create a hybrid-gene phylogenetic tree using an '
+                'alignment as a foundation.'
 )
 
+# Register all methods used by ghost-tree
+plugin.methods.register_function(
+    function=scaffold_hybrid_tree_foundation_tree,
+    inputs={
+        'otu_map': OtuMap,  # ghost-tree semantic type
+        'extension_taxonomy': FeatureData[Taxonomy],
+        'extension_sequences': FeatureData[Sequence],
+        'foundation_tree': Phylogeny[Rooted | Unrooted],
+        'foundation_taxonomy': FeatureData[Taxonomy],
+            },
+    parameters={
+        'graft_level': qiime2.plugin.Str,
+                },
+    outputs=[
+        ('ghost_tree', Phylogeny[Rooted]),
+    ],
+    name='scaffold-hybrid-tree-foundation-tree',
+    description='Create a hybrid-gene phylogenetic tree using '
+                'a tree as a foundation.'
+)
 
 # setup similarity threshold
 p = qiime2.plugin
