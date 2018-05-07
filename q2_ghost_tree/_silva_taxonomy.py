@@ -6,50 +6,56 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+import re
+
 import qiime2.plugin.model as model
 
 ###############################################################################
 #
 # SilvaTaxonomy
 #
-#     Taxonomy File for Silva Database. Unique file to Silva database
-#       containing taxonomy information
+#     Taxonomy File for Silva Database.  A tab-separated file that identifes
+#     the taxonomy and rank of a mapping number in `accession_fh`. This file
+#     should contain exactly five columns beginning with taxonomy, mapping
+#     number and rank. The last two columns are ignored.
 #
 ###############################################################################
+
 
 class SilvaTaxonomyFormat(model.TextFileFormat):
 
     def sniff(self):
 
         with self.open() as fh:
-            return True
-            # TODO add validation here
+
             for line, _ in zip(fh, range(5)):
 
-                line = line.strip()
-                # check that it's a string
-                try:
-                    if type(line) == str:
-                        pass
-                    else:
-                        return False
-                except:
+                line_list = line.strip().split("\t")
+                taxonomy = line_list[0]
+                mapping_num = line_list[1]
+
+                # taxonomy line needs to contain ';'
+                if re.search(";", taxonomy):
+                    pass
+                else:
                     return False
 
-                # check that first two items match (Sumaclust standard)
+                # mapping number must be an int (cast ok)
                 try:
-                    check_list = line.split('\t')
-                    if check_list[0] == check_list[1]:
-                        pass
-                    else:
-                        return False
-                except:
+                    int(mapping_num)
+                    pass
+                except ValueError:
                     return False
 
-                # (TODO) shouldn't contain special chars
+                # there must be at least three columns in the file
+                if len(line_list) >= 3:
+                    pass
+                else:
+                    return False
 
             # if nothing breaks from validation above, then return true
             return True
+
 
 SilvaTaxonomyDirectoryFormat = model.SingleFileDirectoryFormat(
     'SilvaTaxonomyDirectoryFormat', 'silva_taxonomy.txt',

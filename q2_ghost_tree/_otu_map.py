@@ -17,6 +17,7 @@ import qiime2.plugin.model as model
 #
 ###############################################################################
 
+
 class OtuMapFormat(model.TextFileFormat):
 
     def sniff(self):
@@ -47,6 +48,7 @@ class OtuMapFormat(model.TextFileFormat):
 
             # if nothing breaks from validation above, then return true
             return True
+
 
 OtuMapDirectoryFormat = model.SingleFileDirectoryFormat(
     'OtuMapDirectoryFormat', 'otus.txt', OtuMapFormat)

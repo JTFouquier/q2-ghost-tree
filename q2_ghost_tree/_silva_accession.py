@@ -12,44 +12,48 @@ import qiime2.plugin.model as model
 #
 # SilvaAccession
 #
-#     Accession File for Silva Database. Tab delimited file containing
-#       accession numbers and taxonomic IDs.
+#       A tab-separated file mapping accession numbers to a mapping number in
+#       `taxonomy_map`. This file should contain exactly two columns:
+#       accession number and mapping number.
 #
 ###############################################################################
+
 
 class SilvaAccessionFormat(model.TextFileFormat):
 
     def sniff(self):
 
         with self.open() as fh:
-            return True
-            # TODO add validation here
+
             for line, _ in zip(fh, range(5)):
 
-                line = line.strip()
-                # check that it's a string
-                try:
-                    if type(line) == str:
-                        pass
-                    else:
-                        return False
-                except:
+                line_list = line.strip().split("\t")
+                accession = line_list[0]
+                taxid = line_list[1]
+
+                # are there two items in each row?
+                if len(line_list) == 2:
+                    pass
+                else:
                     return False
 
-                # check that first two items match (Sumaclust standard)
+                # first item should not be an int; it contains chars
                 try:
-                    check_list = line.split('\t')
-                    if check_list[0] == check_list[1]:
-                        pass
-                    else:
-                        return False
-                except:
+                    int(accession)
                     return False
+                except ValueError:
+                    pass
 
-                # (TODO) shouldn't contain special chars
+                # is the second item an int? (taxids must be ints)
+                try:
+                    int(taxid)
+                    pass
+                except ValueError:
+                    return False
 
             # if nothing breaks from validation above, then return true
             return True
+
 
 SilvaAccessionDirectoryFormat = model.SingleFileDirectoryFormat(
     'SilvaAccessionDirectoryFormat', 'silva_accession.txt',

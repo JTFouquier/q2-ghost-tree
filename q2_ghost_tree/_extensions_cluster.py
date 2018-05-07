@@ -25,9 +25,9 @@ def extensions_cluster(extension_sequences: DNAFASTAFormat,
 
         # need ghost_tree.nwk here otherwise file exists
         gt_path = os.path.join(tmp, 'otu_map')
-        otus = preprocess_extension_tree_sequences(str(extension_sequences_fh.name),
-                                                   str(similarity_threshold),
-                                                   gt_path)
+        preprocess_extension_tree_sequences(
+            str(extension_sequences_fh.name), str(similarity_threshold),
+            gt_path)
 
         copyfile(gt_path, tmp + 'otu_map')
 

@@ -20,6 +20,7 @@ from ._otu_map import OtuMapFormat
 
 _ghost_tree_defaults = {'graft_level': 'g'}
 
+
 def scaffold_hybrid_tree_foundation_alignment(
         otu_map: OtuMapFormat,
         extension_taxonomy: TSVTaxonomyFormat,

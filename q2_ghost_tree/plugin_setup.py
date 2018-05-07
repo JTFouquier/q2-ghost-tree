@@ -1,6 +1,7 @@
 import qiime2.plugin
 
-from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, Taxonomy
+from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
+    Taxonomy
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
@@ -10,7 +11,7 @@ from ._scaffold_hybrid_tree import scaffold_hybrid_tree_foundation_alignment
 from ._scaffold_hybrid_tree_foundation_tree import \
     scaffold_hybrid_tree_foundation_tree
 from ._extensions_cluster import extensions_cluster
-from ._tip_to_tip_distances import tip_to_tip_distances
+# from ._tip_to_tip_distances import tip_to_tip_distances
 from ._silva import extract_fungi
 
 # import custom semantic types
@@ -143,29 +144,12 @@ plugin.methods.register_function(
 #         'tree_1': Phylogeny[Rooted],
 #         'tree_2': Phylogeny[Rooted],
 #     },
-#     parameters={'method': str,
+#     parameters={'method': qiime2.plugin.Str,
 #     },
 #     outputs=[
-#         ('otu_formatted', str),
+#         ('printed_output', qiime2.plugin.Str),
 #     ],
-#     name='tip_to_tip_distances',
-#     description='Compare to tip distances in two phylogenetic trees using Mantel test'
-# )
-
-
-# # (NOTE this is extremely SILVA specific. Need to review how we
-# # accomplished this)
-# plugin.methods.register_function(
-#     function=extract_fungi,
-#     inputs={
-#         'tree_1': Phylogeny[Rooted],
-#         'tree_2': Phylogeny[Rooted],
-#     },
-#     parameters={'method': str,
-#     },
-#     outputs=[
-#         ('otu_formatted', str),
-#     ],
-#     name='extract_fungi',
-#     description=''
+#     name='compare_trees',
+#     description='Compare tip distances in two phylogenetic trees using '
+#                 'Mantel test'
 # )
