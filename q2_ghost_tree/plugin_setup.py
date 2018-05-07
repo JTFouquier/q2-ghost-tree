@@ -4,13 +4,20 @@ from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, Taxono
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
+
+# import plugin 'wrapper' code to original ghost-tree code
 from ._scaffold_hybrid_tree import scaffold_hybrid_tree_foundation_alignment
 from ._scaffold_hybrid_tree_foundation_tree import \
     scaffold_hybrid_tree_foundation_tree
-
 from ._extensions_cluster import extensions_cluster
 from ._tip_to_tip_distances import tip_to_tip_distances
+from ._silva import extract_fungi
+
+# import custom semantic types
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
+from ._silva_taxonomy import SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat
+from ._silva_accession import SilvaAccessionFormat, \
+    SilvaAccessionDirectoryFormat
 
 # initiate Qiime2 plugin
 plugin = qiime2.plugin.Plugin(
@@ -90,13 +97,44 @@ plugin.methods.register_function(
     inputs={
         'extension_sequences': FeatureData[Sequence],
     },
-    parameters={'similarity_threshold': p
+    parameters={
+        'similarity_threshold': p
     },
     outputs=[
         ('otu_map', OtuMap),
     ],
     name='extensions-cluster',
     description='Groups sequences in .fasta file by similarity threshold'
+)
+
+# register semantic types specific to 'extract fungi' for Silva database
+
+SilvaAccession = qiime2.plugin.SemanticType('SilvaAccession')
+plugin.register_formats(SilvaAccessionFormat, SilvaAccessionDirectoryFormat)
+plugin.register_semantic_types(SilvaAccession)
+plugin.register_semantic_type_to_format(
+    SilvaAccession, artifact_format=SilvaAccessionDirectoryFormat)
+
+SilvaTaxonomy = qiime2.plugin.SemanticType('SilvaTaxonomy')
+plugin.register_formats(SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat)
+plugin.register_semantic_types(SilvaTaxonomy)
+plugin.register_semantic_type_to_format(
+    SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
+
+plugin.methods.register_function(
+    function=extract_fungi,
+    inputs={
+        'aligned_fasta_file': FeatureData[AlignedSequence],
+        'accession_file': SilvaAccession,  # Silva semantic type
+        'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
+        },
+    parameters={
+        },
+    outputs=[
+        ('output_file', FeatureData[AlignedSequence]),
+    ],
+    name='extract-fungi',
+    description='Extract fungi from a large Silva database',
 )
 
 # plugin.methods.register_function(

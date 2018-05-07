@@ -5,7 +5,6 @@
 #
 # The full license is in the LICENSE file, distributed with this software.
 # ----------------------------------------------------------------------------
-import skbio
 import tempfile
 import os
 
@@ -26,8 +25,8 @@ def scaffold_hybrid_tree_foundation_alignment(
         extension_taxonomy: TSVTaxonomyFormat,
         extension_sequences: DNAFASTAFormat,
         foundation_alignment: AlignedDNAFASTAFormat,
-        graft_level: str=_ghost_tree_defaults[
-        'graft_level']) -> NewickFormat:
+        graft_level: str=_ghost_tree_defaults['graft_level'],
+        ) -> NewickFormat:
 
     otu_map_fh = otu_map.open()
     extension_taxonomy_fh = extension_taxonomy.open()

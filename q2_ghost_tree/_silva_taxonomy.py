@@ -10,19 +10,22 @@ import qiime2.plugin.model as model
 
 ###############################################################################
 #
-# OtuMap
+# SilvaTaxonomy
 #
-#     Groups of OTUs clustered by a similarity threshold. Each line contains
-#     tab separated OTUs that are within the similarity threshold.
+#     Taxonomy File for Silva Database. Unique file to Silva database
+#       containing taxonomy information
 #
 ###############################################################################
 
-class OtuMapFormat(model.TextFileFormat):
+class SilvaTaxonomyFormat(model.TextFileFormat):
 
     def sniff(self):
 
         with self.open() as fh:
+            return True
+            # TODO add validation here
             for line, _ in zip(fh, range(5)):
+
                 line = line.strip()
                 # check that it's a string
                 try:
@@ -48,5 +51,6 @@ class OtuMapFormat(model.TextFileFormat):
             # if nothing breaks from validation above, then return true
             return True
 
-OtuMapDirectoryFormat = model.SingleFileDirectoryFormat(
-    'OtuMapDirectoryFormat', 'otus.txt', OtuMapFormat)
+SilvaTaxonomyDirectoryFormat = model.SingleFileDirectoryFormat(
+    'SilvaTaxonomyDirectoryFormat', 'silva_taxonomy.txt',
+    SilvaTaxonomyFormat)

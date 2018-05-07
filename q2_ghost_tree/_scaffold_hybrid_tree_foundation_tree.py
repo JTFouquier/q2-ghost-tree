@@ -5,7 +5,6 @@
 #
 # The full license is in the LICENSE file, distributed with this software.
 # ----------------------------------------------------------------------------
-import skbio
 import tempfile
 import os
 
@@ -21,7 +20,8 @@ from ._otu_map import OtuMapFormat
 
 _ghost_tree_defaults = {'graft_level': 'g'}
 
-def scaffold_hybrid_tree_foundation_tree(otu_map: OtuMapFormat,
+def scaffold_hybrid_tree_foundation_tree(
+        otu_map: OtuMapFormat,
         extension_taxonomy: TSVTaxonomyFormat,
         extension_sequences: DNAFASTAFormat,
         foundation_tree: NewickFormat,
