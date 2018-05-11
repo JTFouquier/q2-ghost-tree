@@ -3,7 +3,6 @@ import qiime2.plugin
 from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
     Taxonomy
 from q2_types.tree import Phylogeny, Rooted, Unrooted
-from q2_types.sample_data import SampleData
 
 import q2_ghost_tree
 
@@ -15,11 +14,9 @@ from ._scaffold_hybrid_tree_foundation_tree import \
 from ._extensions_cluster import extensions_cluster
 from ._tip_to_tip_distances import tip_to_tip_distances
 from ._silva import extract_fungi
+
 # import custom semantic types
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
-from ._tree_compare_stats import GhostTreeTreeCompareStats, \
-    GhostTreeTreeCompareStatsFormat, GhostTreeTreeCompareStatsDirFmt
-
 from ._silva_taxonomy import SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat
 from ._silva_accession import SilvaAccessionFormat, \
     SilvaAccessionDirectoryFormat
@@ -264,18 +261,14 @@ correlation_method = qiime2.plugin
 correlation_method = correlation_method.Str % \
                      correlation_method.Choices(['pearson', 'spearman'])
 
-# TODO tip to tip tree comparison does not work
 # TODO add short descriptions
 
-plugin.methods.register_function(
+plugin.visualizers.register_function(
     function=tip_to_tip_distances,
     inputs={
         'tree_1': Phylogeny[Rooted],
         'tree_2': Phylogeny[Rooted],
     },
-    outputs=[(
-        'tree_compare_stats', SampleData[GhostTreeTreeCompareStats],
-    )],
     parameters={
         'method': correlation_method,
     },
@@ -285,9 +278,6 @@ plugin.methods.register_function(
     },
     parameter_descriptions={
         'method': 'TODO',
-    },
-    output_descriptions={
-        'tree_compare_stats': 'TODO',
     },
     name='compare_trees',
     description='Compare tip distances in two phylogenetic trees using '
@@ -306,11 +296,4 @@ plugin.methods.register_function(
 #                       },
 
 # TODO Need to discuss how to get dependent software installed (Conda?)
-
 # TODO Change OtuMap name? SeqMap?  OTU & ASV
-
-
-plugin.register_formats(GhostTreeTreeCompareStatsFormat, GhostTreeTreeCompareStatsDirFmt)
-plugin.register_semantic_types(GhostTreeTreeCompareStats)
-plugin.register_semantic_type_to_format(
-    SampleData[GhostTreeTreeCompareStats], GhostTreeTreeCompareStatsDirFmt)
