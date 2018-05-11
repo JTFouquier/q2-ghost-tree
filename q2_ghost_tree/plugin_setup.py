@@ -3,6 +3,7 @@ import qiime2.plugin
 from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
     Taxonomy
 from q2_types.tree import Phylogeny, Rooted, Unrooted
+from q2_types.sample_data import SampleData
 
 import q2_ghost_tree
 
@@ -12,11 +13,13 @@ from ._scaffold_hybrid_tree_foundation_alignment import \
 from ._scaffold_hybrid_tree_foundation_tree import \
     scaffold_hybrid_tree_foundation_tree
 from ._extensions_cluster import extensions_cluster
-# from ._tip_to_tip_distances import tip_to_tip_distances
+from ._tip_to_tip_distances import tip_to_tip_distances
 from ._silva import extract_fungi
-
 # import custom semantic types
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
+from ._tree_compare_stats import GhostTreeTreeCompareStats, \
+    GhostTreeTreeCompareStatsFormat, GhostTreeTreeCompareStatsDirFmt
+
 from ._silva_taxonomy import SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat
 from ._silva_accession import SilvaAccessionFormat, \
     SilvaAccessionDirectoryFormat
@@ -186,16 +189,16 @@ plugin.methods.register_function(
                                 'percent similarity you would like your '
                                 'sequences clustered at. E.g., 0.90 means '
                                 'that sequences in one group will be 90% '
-                                'similar to one another',
+                                'similar to one another.',
     },
     output_descriptions={
          'otu_map': 'OtuMap. This returns an OtuMap where each line contains '
                     'sequences that are a certain percent similar to one '
                     'another as entered in the "--p-similarity-threshold" '
-                    'parameter. ',
+                    'parameter.',
     },
     name='extensions-cluster',
-    description='Groups sequences in .fasta file by similarity threshold'
+    description='Groups sequences in .fasta file by similarity threshold.'
 )
 
 # register semantic types specific to 'extract fungi' for Silva database
@@ -212,22 +215,35 @@ plugin.register_semantic_types(SilvaTaxonomy)
 plugin.register_semantic_type_to_format(
     SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
 
-plugin.methods.register_function(
-    function=extract_fungi,
-    inputs={
-        'aligned_fasta_file': FeatureData[AlignedSequence],
-        'accession_file': SilvaAccession,  # Silva semantic type
-        'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
-        },
-    parameters={
-        },
-    outputs=[
-        ('output_file', FeatureData[AlignedSequence]),
-    ],
-    name='extract-fungi',
-    description='Extract fungi from a large Silva database',
-)
+# TODO this is very Silva specific. Transformer? Need help with this.
+# TODO change name of output_file
+# TODO add descriptions when we figure out what to do with Silva.
+# plugin.methods.register_function(
+#     function=extract_fungi,
+#     inputs={
+#         'aligned_fasta_file': FeatureData[AlignedSequence],
+#         'accession_file': SilvaAccession,  # Silva semantic type
+#         'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
+#         },
+#     parameters={
+#     },
+#     outputs=[
+#         ('output_file': FeatureData[AlignedSequence]),
+#     ],
+#     input_descriptions={
+#         'aligned_fasta_file': 'FeatureData[AlignedSequence] ',
+#         'accession_file': 'TODO',
+#         'taxonomy_file': 'TODO',
+#     },
+#     output_descriptions={
+#         'output_file': 'FeatureData[AlignedSequence]',
+#     },
+#     name='extract-fungi',
+#     description='Extract fungi from a large Silva database',
+# )
 
+# TODO should I add g2_ghost_tree to function here?
+# # TODO add the pearson or spearman as options here
 # plugin.methods.register_function(
 #     function=tip_to_tip_distances,
 #     inputs={
@@ -243,3 +259,58 @@ plugin.methods.register_function(
 #     description='Compare tip distances in two phylogenetic trees using '
 #                 'Mantel test'
 # )
+
+correlation_method = qiime2.plugin
+correlation_method = correlation_method.Str % \
+                     correlation_method.Choices(['pearson', 'spearman'])
+
+# TODO tip to tip tree comparison does not work
+# TODO add short descriptions
+
+plugin.methods.register_function(
+    function=tip_to_tip_distances,
+    inputs={
+        'tree_1': Phylogeny[Rooted],
+        'tree_2': Phylogeny[Rooted],
+    },
+    outputs=[(
+        'tree_compare_stats', SampleData[GhostTreeTreeCompareStats],
+    )],
+    parameters={
+        'method': correlation_method,
+    },
+    input_descriptions={
+        'tree_1': 'One of the two trees you would like to compare',
+        'tree_2': 'Second of the two trees you would like to compare',
+    },
+    parameter_descriptions={
+        'method': 'TODO',
+    },
+    output_descriptions={
+        'tree_compare_stats': 'TODO',
+    },
+    name='compare_trees',
+    description='Compare tip distances in two phylogenetic trees using '
+                 'Mantel test.'
+)
+
+# CODE TO COPY TODO remove this later
+# input_descriptions = {
+#                          'TODO': 'TODO',
+#                      },
+# parameter_descriptions = {
+#                              'TODO': 'TODO',
+#                          },
+# output_descriptions = {
+#                           'TODO': 'TODO',
+#                       },
+
+# TODO Need to discuss how to get dependent software installed (Conda?)
+
+# TODO Change OtuMap name? SeqMap?  OTU & ASV
+
+
+plugin.register_formats(GhostTreeTreeCompareStatsFormat, GhostTreeTreeCompareStatsDirFmt)
+plugin.register_semantic_types(GhostTreeTreeCompareStats)
+plugin.register_semantic_type_to_format(
+    SampleData[GhostTreeTreeCompareStats], GhostTreeTreeCompareStatsDirFmt)

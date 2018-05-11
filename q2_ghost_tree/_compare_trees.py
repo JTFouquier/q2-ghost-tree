@@ -10,7 +10,7 @@ import qiime2.plugin.model as model
 
 ###############################################################################
 #
-# OtuMap
+# CompareTrees
 #
 #     Groups of OTUs clustered by a similarity threshold. Each line contains
 #     tab separated OTUs that are within the similarity threshold.
@@ -27,7 +27,6 @@ class OtuMapFormat(model.TextFileFormat):
                 line = line.strip()
                 # check that it's a string
                 try:
-                    # TODO this should cast and see if it
                     if type(line) == str:
                         pass
                     else:
