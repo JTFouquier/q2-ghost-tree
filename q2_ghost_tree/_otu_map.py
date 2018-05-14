@@ -19,7 +19,7 @@ import qiime2.plugin.model as model
 
 
 class OtuMapFormat(model.TextFileFormat):
-
+    # TODO _validate_ (min and max) (sniff is deprecated)
     def sniff(self):
 
         with self.open() as fh:

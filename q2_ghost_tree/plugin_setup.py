@@ -16,6 +16,8 @@ from ._tip_to_tip_distances import tip_to_tip_distances
 from ._silva import extract_fungi
 
 # import custom semantic types
+from ._aligned_rna_sequences import AlignedRNAFASTAFormat, \
+    AlignedRNAFASTADirectoryFormat
 from ._otu_map import OtuMapFormat, OtuMapDirectoryFormat
 from ._silva_taxonomy import SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat
 from ._silva_accession import SilvaAccessionFormat, \
@@ -212,57 +214,41 @@ plugin.register_semantic_types(SilvaTaxonomy)
 plugin.register_semantic_type_to_format(
     SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
 
-# TODO this is very Silva specific. Transformer? Need help with this.
-# TODO change name of output_file
-# TODO add descriptions when we figure out what to do with Silva.
-# plugin.methods.register_function(
-#     function=extract_fungi,
-#     inputs={
-#         'aligned_fasta_file': FeatureData[AlignedSequence],
-#         'accession_file': SilvaAccession,  # Silva semantic type
-#         'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
-#         },
-#     parameters={
-#     },
-#     outputs=[
-#         ('output_file': FeatureData[AlignedSequence]),
-#     ],
-#     input_descriptions={
-#         'aligned_fasta_file': 'FeatureData[AlignedSequence] ',
-#         'accession_file': 'TODO',
-#         'taxonomy_file': 'TODO',
-#     },
-#     output_descriptions={
-#         'output_file': 'FeatureData[AlignedSequence]',
-#     },
-#     name='extract-fungi',
-#     description='Extract fungi from a large Silva database',
-# )
+AlignedRNASequences = qiime2.plugin.SemanticType('AlignedRNASequences')
+plugin.register_formats(AlignedRNAFASTAFormat, AlignedRNAFASTADirectoryFormat)
+plugin.register_semantic_types(AlignedRNASequences)
+plugin.register_semantic_type_to_format(
+    AlignedRNASequences, artifact_format=AlignedRNAFASTADirectoryFormat)
 
-# TODO should I add g2_ghost_tree to function here?
-# # TODO add the pearson or spearman as options here
-# plugin.methods.register_function(
-#     function=tip_to_tip_distances,
-#     inputs={
-#         'tree_1': Phylogeny[Rooted],
-#         'tree_2': Phylogeny[Rooted],
-#     },
-#     parameters={'method': qiime2.plugin.Str,
-#     },
-#     outputs=[
-#         ('printed_output', qiime2.plugin.Str),
-#     ],
-#     name='compare_trees',
-#     description='Compare tip distances in two phylogenetic trees using '
-#                 'Mantel test'
-# )
+plugin.methods.register_function(
+    function=extract_fungi,
+    inputs={
+        'aligned_silva_file': AlignedRNASequences,
+        'accession_file': SilvaAccession,  # Silva semantic type
+        'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
+        },
+    parameters={
+    },
+    outputs=[
+        ('aligned_seqs', AlignedRNASequences),
+    ],
+    input_descriptions={
+        'aligned_silva_file': 'TODO',
+        'accession_file': 'TODO',
+        'taxonomy_file': 'TODO',
+    },
+    output_descriptions={
+        'aligned_seqs': 'TODO',
+    },
+    name='extract-fungi',
+    description='Extract fungi from a large Silva database',
+)
 
 correlation_method = qiime2.plugin
 correlation_method = correlation_method.Str % \
                      correlation_method.Choices(['pearson', 'spearman'])
 
 # TODO add short descriptions
-
 plugin.visualizers.register_function(
     function=tip_to_tip_distances,
     inputs={
@@ -281,19 +267,8 @@ plugin.visualizers.register_function(
     },
     name='compare_trees',
     description='Compare tip distances in two phylogenetic trees using '
-                 'Mantel test.'
+                'Mantel test.'
 )
-
-# CODE TO COPY TODO remove this later
-# input_descriptions = {
-#                          'TODO': 'TODO',
-#                      },
-# parameter_descriptions = {
-#                              'TODO': 'TODO',
-#                          },
-# output_descriptions = {
-#                           'TODO': 'TODO',
-#                       },
 
 # TODO Need to discuss how to get dependent software installed (Conda?)
 # TODO Change OtuMap name? SeqMap?  OTU & ASV
