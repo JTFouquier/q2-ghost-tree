@@ -13,6 +13,8 @@ quality multiple sequence aligments and subsequently poor phylogenetic trees.
 
 Here is an example of results you can achieve with ghost-tree:
 
+![](https://github.com/JTFouquier/q2-ghost-tree/blob/master/images/Picture1.png)
+
 Saliva (blue) and restroom (red) ITS sequences compared using
 binary jaccard, unweighted UniFrac with Muscle aligned ITS sequences,
 and unweighted UniFrac with a *ghost-tree* tree.
