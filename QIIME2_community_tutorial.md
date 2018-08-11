@@ -1,8 +1,7 @@
 # *q2-ghost-tree* is a plugin for creating hybrid trees within the QIIME 2 environment.
 
 *ghost-tree* is a bioinformatics tool that combines sequence data from two
-genetic marker databases into one hybrid phylogenetic tree (a ghost tree, not
-hyphenated and not italicized) that can be used for diversity analyses. One
+genetic marker databases into one hybrid phylogenetic tree that can be used for diversity analyses. One
 database is used as a "foundation tree" because it better describes genetic
 relationships across all phyla, and the other database (the "extensions" or
 tips of the tree) provides finer taxonomic resolution.
@@ -13,10 +12,11 @@ quality multiple sequence aligments and subsequently poor phylogenetic trees.
 
 Here is an example of results you can achieve with ghost-tree:
 
-Saliva (blue) and restroom (red) ITS sequences compared using
+![](https://github.com/JTFouquier/q2-ghost-tree/blob/master/images/Picture1.png)
+
+Fig 1. Saliva (blue) and restroom (red) ITS sequences compared using
 binary jaccard, unweighted UniFrac with Muscle aligned ITS sequences,
 and unweighted UniFrac with a *ghost-tree* tree.
-
 
 *If you are doing 16S microbiome analysis or analysis using a marker-gene region
 that makes good quality trees, then you likely do not need to proceed with
@@ -122,7 +122,7 @@ will need to experiment.
 
 TODO See other readme.
 
-## ~Examples~ of some related QIIME 1 -> QIIME 2 imports (creating a .qza)
+## Examples of some related QIIME 1 -> QIIME 2 imports (creating a .qza)
 
 For more information see the
 [QIIME 2 docs on importing data](https://docs.qiime2.org/2018.6/tutorials/importing/#importing-seqs).
