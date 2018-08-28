@@ -1,7 +1,7 @@
 import qiime2.plugin
 
 from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
-    Taxonomy
+    Taxonomy, AlignedDNASequencesDirectoryFormat
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
@@ -214,23 +214,29 @@ plugin.register_semantic_types(SilvaTaxonomy)
 plugin.register_semantic_type_to_format(
     SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
 
+# TODO
+# Changing Silva dependent functions to only require DNA
 AlignedRNASequences = qiime2.plugin.SemanticType('AlignedRNASequences')
 plugin.register_formats(AlignedRNAFASTAFormat, AlignedRNAFASTADirectoryFormat)
 plugin.register_semantic_types(AlignedRNASequences)
 plugin.register_semantic_type_to_format(
     AlignedRNASequences, artifact_format=AlignedRNAFASTADirectoryFormat)
+# TODO
+plugin.register_semantic_type_to_format(
+    FeatureData[AlignedSequence],
+    artifact_format=AlignedRNAFASTADirectoryFormat)
 
 plugin.methods.register_function(
     function=extract_fungi,
     inputs={
-        'aligned_silva_file': AlignedRNASequences,
+        'aligned_silva_file': FeatureData[AlignedSequence],
         'accession_file': SilvaAccession,  # Silva semantic type
         'taxonomy_file': SilvaTaxonomy,  # Silva semantic type
         },
     parameters={
     },
     outputs=[
-        ('aligned_seqs', AlignedRNASequences),
+        ('aligned_seqs', FeatureData[AlignedSequence]),
     ],
     input_descriptions={
         'aligned_silva_file': 'TODO',
