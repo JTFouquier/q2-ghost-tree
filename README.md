@@ -1,4 +1,4 @@
-# q2-ghost-tree
+# q2-ghost-tree installation and testing instructions
 
 This is a QIIME 2 plugin for 'ghost-tree: creating hybrid-gene phylogenetic
 trees for diversity analysis.' The original ghost-tree repository can be found
@@ -10,14 +10,14 @@ written to guide developers on how to install and test ghost-tree prior to
 officially releasing it for QIIME 2 use as this is my first time developing
 a plugin! :)
 
-To use and test this plugin you will need to work in command line and follow
-these instructions:
+To use and test this plugin you will need to work in command line
+and follow these instructions:
 
 1)  Install the current version of QIIME 2 and activate it following the
     [directions on the QIIME 2 website](https://docs.qiime2.org/2018.4/install/). 
 
     Make sure you are now working inside the QIIME 2 virtual environment.
-    The command prompt should include something like '(qiime2-2018.4)' with
+    The command prompt should include something like '(qiime2-2018.6)' with
     the current version of QIIME 2. You want to be working from within the 
     QIIME 2 environment when you install the rest of the code.
 
@@ -44,26 +44,31 @@ these instructions:
         This is already installed in QIIME 2! If you were using
         ghost-tree standalone, you would need to install this, but because
         you installed QIIME 2, it comes with it.
+
+        `conda install fasttree -c bioconda
         
-    2)  sumaclust: 
-        
-        See [the install directions](https://git.metabarcoding.org/obitools/sumaclust/wikis/home).
-        This install can be challenging, and in the future I plan to get this 
-        put into conda so it can be more quickly installed. For now, this
-        is the way we do it.
+    2)  sumaclust:
+
+        sumaclust is now on Bioconda!
+        `conda install -c bioconda sumaclust` will install it for you
+        inside your QIIME 2 environment.
 
     3)  muscle:
-        `conda install -c bioconda muscle` should quickly install muscle.
+        `conda install muscle -c bioconda` should quickly install muscle.
 
     To make sure these tools are correctly installed, you will test by
     typing their name and making sure you see something indicating it is
     installed.
 
-4)  Next, you will install the q2-ghost-tree plugin with the command:
+4)  Next, you will install the *q2-ghost-tree* plugin with the command:
 
     `git clone https://github.com/JTFouquier/q2-ghost-tree.git`
 
-    This will install the plugin! To make sure that QIIME 2 recognizes the
+    Find the setup.py file by navigating to the appropriate directory
+    on the command line and do `pip install -e .` in the same way you
+    did with the original ghost-tree tool.
+
+    This should install the plugin! To make sure that QIIME 2 recognizes the
     plugin, you should enter `qiime dev refresh-cache` This basically
     refreshes the QIIME 2 environment and allows it to look for the entry
     points that were created in the q2-ghost-tree plugin. These entry points
@@ -72,14 +77,40 @@ these instructions:
 
     When you type `qiime` you should now see ghost-tree as an available plugin.
 
-5) Importing files: TODO (test imports)
+5) Importing files as QIIME 2 data types:
 
-6) Testing: 
-    
-   
+    Test that you can import the files in the
+    [small_test_files directory](https://github.com/JTFouquier/q2-ghost-tree/tree/master/small_test_files/original-non-qiime-files)
 
+    a) Extension sequences:
 
+    `qiime tools import --input-path
+    original-non-qiime-files/extension_seqs.fasta --type
+    FeatureData[Sequence] --output-path extension_seqs.qza`
 
+    b) Extension taxonomy:
 
+    `qiime tools import --input-path
+    original-non-qiime-files/minitaxonomy.txt --type
+    FeatureData[Taxonomy] --output-path minitaxonomy.qza
+    --source-format HeaderlessTSVTaxonomyFormat`
+
+    c) Extension OTUs
+
+    `qiime tools import --input-path
+    original-non-qiime-files/miniotus.txt --type OtuMap
+    --output-path miniotus.qza`
+
+    d) Foundation sequences:
+
+    `qiime tools import --input-path
+    original-non-qiime-files/foundation_seqs.fasta --type
+    FeatureData[Sequence] --output-path foundation_seqs.qza`
+
+    e) Foundation tree:
+
+    `qiime tools import --input-path
+    original-non-qiime-files/foundation_tree.nwk --type
+    Phylogeny[Rooted] --output-path foundation_tree.qza`
 
 
