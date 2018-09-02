@@ -114,3 +114,37 @@ and follow these instructions:
     Phylogeny[Rooted] --output-path foundation_tree.qza`
 
 
+6) Testing each subcommand in `qiime ghost-tree` (note extract fungi is
+currently unavailable)
+
+    a) Group your rep seqs at 90% similarity. This handles the
+    abundant unidentified organisms.
+
+    `qiime ghost-tree extensions-cluster --i-extension-sequences
+    extension_seqs.qza --p-similarity-threshold 0.90 --o-otu-map
+    extensions_otu_map_90.qza`
+
+    b) Create a ghost tree using a foundation .nwk tree.
+
+    `qiime ghost-tree scaffold-hybrid-tree-foundation-tree
+    --i-otu-map extensions_otu_map_90.qza --i-extension-taxonomy
+    minitaxonomy.qza --i-extension-sequences extension_seqs.qza
+    --i-foundation-tree foundation_tree.qza --i-foundation-taxonomy
+    minitaxonomy_foundation.qza --o-ghost-tree
+    ghost-tree-foundation-tree-90-otus.qza`
+
+    c) Create a ghost tree using a foundation .nwk tree, and using
+    class level graft points instead of default genus.
+
+    `qiime ghost-tree scaffold-hybrid-tree-foundation-tree
+    --i-otu-map extensions_otu_map_90.qza --i-extension-taxonomy
+    minitaxonomy.qza --i-extension-sequences extension_seqs.qza
+    --i-foundation-tree foundation_tree.qza --i-foundation-taxonomy
+    minitaxonomy_foundation.qza --o-ghost-tree
+    ghost-tree-foundation-tree-90-otus-class-level-graft-points.qza
+    --p-graft-level c`
+
+    d) Create a ghost tree using aligned sequences instead of a tree as
+    your foundation.
+
+    Coming soon. Need to work on transformer :)

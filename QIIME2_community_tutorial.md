@@ -1,27 +1,24 @@
 # *q2-ghost-tree* is a plugin for creating hybrid trees within the QIIME 2 environment.
 
-*ghost-tree* is a bioinformatics tool that combines sequence data from two
-genetic marker databases into one hybrid phylogenetic tree that can be used for diversity analyses. One
-database is used as a "foundation tree" because it better describes genetic
-relationships across all phyla, and the other database (the "extensions" or
-tips of the tree) provides finer taxonomic resolution.
+*ghost-tree* is a bioinformatics tool that combines sequence data from
+two genetic marker databases into one hybrid phylogenetic tree that can
+be used for diversity analyses. One database is used as a "foundation
+tree" because it better describes genetic relationships across all
+phyla, and the other database (the "extensions" or tips of the tree)
+provides finer taxonomic resolution.
 
-The most popular application of this method is for fungal microbiome analysis
-using ITS sequences which provide great species identification, but make poor
-quality multiple sequence aligments and subsequently poor phylogenetic trees.
+The most popular application of this method is for fungal microbiome
+analysis using ITS sequences which provide great species identification,
+but make poor quality multiple sequence aligments (MSAs) and
+subsequently poor phylogenetic trees.
 
 Here is an example of results you can achieve with ghost-tree:
 
 ![](https://github.com/JTFouquier/q2-ghost-tree/blob/master/images/Picture1.png)
 
 Fig 1. Saliva (blue) and restroom (red) ITS sequences compared using
-binary jaccard, unweighted UniFrac with Muscle aligned ITS sequences,
-and unweighted UniFrac with a *ghost-tree* tree.
-
-*If you are doing 16S microbiome analysis or analysis using a marker-gene region
-that makes good quality trees, then you likely do not need to proceed with
-this tutorial.*
-
+A) binary jaccard, B) unweighted UniFrac with Muscle aligned ITS sequences,
+and C) unweighted UniFrac with a *ghost-tree* tree.
 
 ## You can use ghost-tree in **two** ways:
 
@@ -31,6 +28,8 @@ this tutorial.*
 2) Install and use the *q2-ghost-tree* plugin
     - This has more features including the ability to graft at different levels
     (i.e. phylum, class, order, family). Default is genus.
+
+    TODO ADD PICTURE
 
 ## 1) To use pre-built ghost trees for fungal ITS amplicon sequence analysis in QIIME 2 (*most popular*)
 
@@ -118,9 +117,12 @@ phylogenetic `qiime diversity` commands.
 ## Using q2-ghost-tree to create your own hybrid tree
 
 For custom trees, regions other than ITS, or different graft levels, you
-will need to experiment.
+can experiment with q2-ghost-tree by installing the plugin following
+the documents in QIIME 2.
 
-TODO See other readme.
+You must also install the original ghost-tree tool (TODO).
+
+See original readme
 
 ## Examples of some related QIIME 1 -> QIIME 2 imports (creating a .qza)
 
