@@ -1,7 +1,9 @@
+import importlib
+
 import qiime2.plugin
 
 from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
-    Taxonomy, AlignedDNASequencesDirectoryFormat
+    Taxonomy, AlignedDNASequencesDirectoryFormat, AlignedDNAFASTAFormat
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
@@ -215,16 +217,17 @@ plugin.register_semantic_type_to_format(
     SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
 
 # TODO
-# Changing Silva dependent functions to only require DNA
+# Create and register AlignedRNASequences so that transformation can happen
 AlignedRNASequences = qiime2.plugin.SemanticType('AlignedRNASequences')
 plugin.register_formats(AlignedRNAFASTAFormat, AlignedRNAFASTADirectoryFormat)
 plugin.register_semantic_types(AlignedRNASequences)
 plugin.register_semantic_type_to_format(
     AlignedRNASequences, artifact_format=AlignedRNAFASTADirectoryFormat)
 # TODO
-plugin.register_semantic_type_to_format(
-    FeatureData[AlignedSequence],
-    artifact_format=AlignedRNAFASTADirectoryFormat)
+# remove this as Matt suggested
+# plugin.register_semantic_type_to_format(
+#     FeatureData[AlignedSequence],
+#     artifact_format=AlignedRNAFASTADirectoryFormat)
 
 plugin.methods.register_function(
     function=extract_fungi,
@@ -276,5 +279,4 @@ plugin.visualizers.register_function(
                 'Mantel test.'
 )
 
-# TODO Need to discuss how to get dependent software installed (Conda?)
-# TODO Change OtuMap name? SeqMap?  OTU & ASV
+importlib.import_module('q2_ghost_tree._transformer')
