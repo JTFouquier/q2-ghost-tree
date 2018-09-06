@@ -3,7 +3,7 @@ import importlib
 import qiime2.plugin
 
 from q2_types.feature_data import FeatureData, Sequence, AlignedSequence, \
-    Taxonomy, AlignedDNASequencesDirectoryFormat, AlignedDNAFASTAFormat
+    Taxonomy
 from q2_types.tree import Phylogeny, Rooted, Unrooted
 
 import q2_ghost_tree
@@ -25,17 +25,17 @@ from ._silva_taxonomy import SilvaTaxonomyFormat, SilvaTaxonomyDirectoryFormat
 from ._silva_accession import SilvaAccessionFormat, \
     SilvaAccessionDirectoryFormat
 
-# TODO Citations are not listed correctly here
+
+# TODO cite microbiome in ref
 # initiate Qiime2 plugin
 plugin = qiime2.plugin.Plugin(
     name='ghost-tree',
     description='ghost-tree is a bioinformatics tool that combines sequence '
-                'data from two genetic marker databases '
-                'into one phylogenetic tree that can be used for diversity '
-                'analyses. One database is used as a "foundation tree" '
-                'because it provides better phylogeny across all phyla, '
-                'and the other database provides finer taxonomic resolution.\n'
-                ''
+                'data from two genetic marker databases into one phylogenetic '
+                'tree that can be used for diversity analyses. One database '
+                'is used as a "foundation tree" because it provides better '
+                'phylogeny across all phyla, and the other database provides '
+                'finer taxonomic resolution.\n'
                 '\nPlease cite: ghost-tree: creating hybrid-gene phylogenetic '
                 'trees for diversity analyses. Fouquier J, Rideout JR, '
                 'Bolyen E, Chase J, Shiffer A, McDonald D, Knight R, Caporaso '
@@ -56,10 +56,6 @@ plugin.register_formats(OtuMapFormat, OtuMapDirectoryFormat)
 plugin.register_semantic_types(OtuMap)
 plugin.register_semantic_type_to_format(OtuMap,
                                         artifact_format=OtuMapDirectoryFormat)
-
-# Register all methods used by ghost-tree
-# TODO add descriptions here... what is the point of name... redundant on help
-# TODO pages
 
 graft_level = qiime2.plugin
 graft_level = graft_level.Str % \
@@ -216,18 +212,12 @@ plugin.register_semantic_types(SilvaTaxonomy)
 plugin.register_semantic_type_to_format(
     SilvaTaxonomy, artifact_format=SilvaTaxonomyDirectoryFormat)
 
-# TODO
 # Create and register AlignedRNASequences so that transformation can happen
 AlignedRNASequences = qiime2.plugin.SemanticType('AlignedRNASequences')
 plugin.register_formats(AlignedRNAFASTAFormat, AlignedRNAFASTADirectoryFormat)
 plugin.register_semantic_types(AlignedRNASequences)
 plugin.register_semantic_type_to_format(
     AlignedRNASequences, artifact_format=AlignedRNAFASTADirectoryFormat)
-# TODO
-# remove this as Matt suggested
-# plugin.register_semantic_type_to_format(
-#     FeatureData[AlignedSequence],
-#     artifact_format=AlignedRNAFASTADirectoryFormat)
 
 plugin.methods.register_function(
     function=extract_fungi,
@@ -242,22 +232,23 @@ plugin.methods.register_function(
         ('aligned_seqs', FeatureData[AlignedSequence]),
     ],
     input_descriptions={
-        'aligned_silva_file': 'TODO',
-        'accession_file': 'TODO',
-        'taxonomy_file': 'TODO',
+        'aligned_silva_file': 'Silva database containing fungi. Should be '
+                              'imported from RNA and transformed upon import'
+                              'to DNA (replaces Us with Ts)',
+        'accession_file': 'Silva specific accession file',
+        'taxonomy_file': 'Silva specific taxonomy file',
     },
     output_descriptions={
-        'aligned_seqs': 'TODO',
+        'aligned_seqs': 'Aligned Silva sequences containing fungi only',
     },
     name='extract-fungi',
-    description='Extract fungi from a large Silva database',
+    description='Extract fungi from a large, aligned Silva database',
 )
 
 correlation_method = qiime2.plugin
 correlation_method = correlation_method.Str % \
                      correlation_method.Choices(['pearson', 'spearman'])
 
-# TODO add short descriptions
 plugin.visualizers.register_function(
     function=tip_to_tip_distances,
     inputs={
@@ -268,14 +259,14 @@ plugin.visualizers.register_function(
         'method': correlation_method,
     },
     input_descriptions={
-        'tree_1': 'One of the two trees you would like to compare',
-        'tree_2': 'Second of the two trees you would like to compare',
+        'tree_1': 'Tree you would like to compare',
+        'tree_2': 'Other tree you would like to compare',
     },
     parameter_descriptions={
-        'method': 'TODO',
+        'method': 'Correlation method to use.',
     },
     name='compare_trees',
-    description='Compare tip distances in two phylogenetic trees using '
+    description='Compare tip distances in two phylogenetic trees using a '
                 'Mantel test.'
 )
 
