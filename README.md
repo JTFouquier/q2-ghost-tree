@@ -39,8 +39,10 @@ and follow these instructions:
     code so that you do not have to rewrite all the code inside your new
     plugin. The plugin just reuses most of the original code. Very convenient!
 
-    *ghost-tree* has three software dependencies it relies on. You will need to
-    install these tools.
+    *ghost-tree* has three software dependencies it relies on.
+
+    If you use Conda to install ghost-tree, it should have installed
+    these for you!
 
 
 4)  Next, you will install the *q2-ghost-tree* plugin with the command:
