@@ -233,7 +233,7 @@ plugin.methods.register_function(
     ],
     input_descriptions={
         'aligned_silva_file': 'Silva database containing fungi. Should be '
-                              'imported from RNA and transformed upon import'
+                              'imported from RNA and transformed upon import '
                               'to DNA (replaces Us with Ts)',
         'accession_file': 'Silva specific accession file',
         'taxonomy_file': 'Silva specific taxonomy file',

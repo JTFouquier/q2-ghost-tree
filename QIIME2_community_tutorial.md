@@ -37,27 +37,22 @@ and C) unweighted UniFrac with a *ghost-tree* tree.
 
 1) a ghost tree built using the same UNITE database you use for closed-reference clustering.
 
-2) a UNITE ITS database and
+2) a UNITE ITS database
 
 ### Import your ghost tree into QIIME 2 as a .qza file:
 
 #### Find the ghost tree you need
 
-You can use one of the [pre-built
+You can use one of the newly [pre-built
 ghost trees found here](https://github.com/JTFouquier/ghost-tree-trees)
 (for older trees, look
 [here](https://github.com/JTFouquier/ghost-tree/tree/master/trees)), because
 you really just need the "extension" IDs in the tree to match the IDs inside
 your feature table .qza file (.biom table).
 
-These were recently added to a new repository (*ghost-tree-trees*) so that a
-clone of the *ghost-tree* or *q2-ghost-tree* does not fill your computer with
-unnecessary large files.
-
 Find the ghost tree which corresponds to the UNITE ITS DB you are using.
 
-
-#### Import the ghost tree
+#### Import the ghost tree you would like to use
 
 Note, the ghost trees *are already* rooted by midpoint from *ghost-tree*, but
 apparently there's additional magic in QIIME 2. :) So we quickly import as
@@ -71,7 +66,7 @@ apparently there's additional magic in QIIME 2. :) So we quickly import as
 `qiime phylogeny midpoint-root --i-tree ghost-tree-unrooted.qza
 --o-rooted-tree ghost-tree-midpoint-root.qza`
 
-### Import the UNITE database you wish to use for clustering into QIIME 2:
+### Import the UNITE database you wish to use for clustering your sequences in QIIME 2:
 
 #### Find the appropriate UNITE ITS database
 
@@ -91,12 +86,11 @@ from [Dada2](https://docs.qiime2.org/2018.6/plugins/available/dada2/) or
 [Deblur](https://docs.qiime2.org/2018.6/plugins/available/deblur/).
 
 Once you have these sequences, you will need to cluster them using `qiime
-vsearch`. This is necessary because the tips of the tree must match your
+vsearch`. This is necessary because the IDs in the ghost tree must match your
 feature table for `qiime diversity` phylogenetic analyses to work. Hash values
-will not work for default ghost trees.
+will not work here.
 
-
-[See directions here for otu clustering](https://docs.qiime2.org/2018.6/tutorials/otu-clustering/)
+[See directions here for closed-reference otu clustering](https://docs.qiime2.org/2018.8/tutorials/otu-clustering/)
 to dereplicate sequences. Briefly, you will:
 1) Use the `qiime vsearch dereplicate-sequences` command.
 2) Then cluster your seqs with the UNITE database you selected using
@@ -114,6 +108,10 @@ You can use the feature table and the ghost tree (your phylogenetic tree) for
 phylogenetic `qiime diversity` commands.
 
 
+
+
+
+
 ## Using q2-ghost-tree to create your own hybrid tree
 
 For custom trees, regions other than ITS, or different graft levels, you
@@ -122,12 +120,13 @@ the documents in QIIME 2.
 
 You must also install the original ghost-tree tool (TODO).
 
-See original readme
-
 ## Examples of some related QIIME 1 -> QIIME 2 imports (creating a .qza)
 
 For more information see the
 [QIIME 2 docs on importing data](https://docs.qiime2.org/2018.6/tutorials/importing/#importing-seqs).
+
+
+### Examples of related imports
 
 #### Import a seqs.fna file:
 `qiime tools import --type FeatureData[Sequence] --input-path seqs.fna
@@ -137,7 +136,7 @@ For more information see the
 
 `qiime tools import --type FeatureData[Sequence] --input-path
 sh_refs_qiime_ver7_dynamic_01.12.2017.fasta --output-path
-sh_refs_qiime_ver7_dynamic_01.12.2017.qza `
+sh_refs_qiime_ver7_dynamic_01.12.2017.qza`
 
 #### Import a Biom table:
 
@@ -145,6 +144,8 @@ sh_refs_qiime_ver7_dynamic_01.12.2017.qza `
 --output-path feature_table.qza --source-format BIOMV100Format`
 
 --source-format will be one of several formats
+
+
 
 
 
