@@ -16,6 +16,7 @@ from ._scaffold_hybrid_tree_foundation_tree import \
 from ._extensions_cluster import extensions_cluster
 from ._tip_to_tip_distances import tip_to_tip_distances
 from ._silva import extract_fungi
+from ._filter_alignment_positions import filter_alignment_positions
 
 # import custom semantic types
 from ._aligned_rna_sequences import AlignedRNAFASTAFormat, \
@@ -35,19 +36,19 @@ plugin = qiime2.plugin.Plugin(
                 'tree that can be used for diversity analyses. One database '
                 'is used as a "foundation tree" because it provides better '
                 'phylogeny across all phyla, and the other database provides '
-                'finer taxonomic resolution.\n'
-                '\nPlease cite: ghost-tree: creating hybrid-gene phylogenetic '
-                'trees for diversity analyses. Fouquier J, Rideout JR, '
-                'Bolyen E, Chase J, Shiffer A, McDonald D, Knight R, Caporaso '
-                'JG, and Kelley ST',
+                'finer taxonomic resolution.\n' 
+                '\nPlease cite: Fouquier J, Rideout JR, Bolyen E, Chase J, '
+                'Shiffer A, McDonald D, Knight R, Caporaso JG, Kelley ST. '
+                '2016. Ghost-tree: creating hybrid-gene phylogenetic trees '
+                'for diversity analyses. Microbiome',
     version=q2_ghost_tree.__version__,
     website='https://github.com/JTFouquier/ghost-tree',
     package='q2_ghost_tree',
     user_support_text=None,
-    citation_text='ghost-tree: creating hybrid-gene phylogenetic trees for '
-                  'diversity analyses. Fouquier J, Rideout JR, Bolyen E, '
-                  'Chase J, Shiffer A, McDonald D, Knight R, Caporaso JG, and '
-                  'Kelley ST',
+    citation_text='Fouquier J, Rideout JR, Bolyen E, Chase J, Shiffer A, '
+                  'McDonald D, Knight R, Caporaso JG, Kelley ST. 2016. '
+                  'Ghost-tree: creating hybrid-gene phylogenetic trees for '
+                  'diversity analyses. Microbiome',
     short_description='Plugin for creating hybrid-gene phylogenetic trees.',
 )
 
@@ -196,6 +197,38 @@ plugin.methods.register_function(
     },
     name='extensions-cluster',
     description='Groups sequences in .fasta file by similarity threshold.'
+)
+
+plugin.methods.register_function(
+    function=filter_alignment_positions,
+    inputs={
+        'aligned_sequences_file': FeatureData[AlignedSequence],
+    },
+    parameters={
+        'maximum_gap_frequency': p,
+        'maximum_position_entropy': p,
+    },
+    outputs=[
+        ('aligned_seqs', FeatureData[AlignedSequence]),
+    ],
+    input_descriptions={
+        'aligned_sequences_file': 'Aligned DNA sequences to be filtered',
+    },
+    parameter_descriptions={
+        'maximum_gap_frequency': 'Maximum gap frequency at each position '
+                                 '(0.00 to 1.00)',
+        'maximum_position_entropy': 'Maximum position entropy (0.00 to 1.00)',
+    },
+    output_descriptions={
+        'aligned_seqs': 'Aligned and filtered sequences',
+    },
+    name='filter-alignment-sequences',
+    description='Filters an alignment file based on positional properties. '
+                'This command takes a foundation-alignment-file and uses the '
+                'maximum-gap-frequency (e.g.0.50) and maximum-position-entropy '
+                '(e.g. 0.80) arguments to filter positions and return a '
+                'new alignment output-file. Typically users would want to '
+                'remove high gap positions and high entropy positions.'
 )
 
 # register semantic types specific to 'extract fungi' for Silva database
